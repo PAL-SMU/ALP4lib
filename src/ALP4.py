@@ -618,6 +618,9 @@ class ALP4(object):
 
         if dataFormat == 'Python':
             pImageData = imgData.astype(np.uint8).ctypes.data_as(ct.c_void_p)
+            # pImageData = (ct.c_ubyte*imgData.size)()
+            # for ind,x in enumerate(imgData):
+            #     pImageData[ind] = x
         elif dataFormat == 'C':
             pImageData = ct.cast(imgData, ct.c_void_p)
         else:
@@ -891,7 +894,7 @@ class ALP4(object):
 
         See AlpDevControlEx in the ALP API description for control types.
         """
-        self._checkError(self._ALPLib.AlpDevControlEx(self.ALP_ID, controlType, userStruct.byref()),
+        self._checkError(self._ALPLib.AlpDevControlEx(self.ALP_ID, controlType, ct.byref(userStruct)),
                          'Error sending request.')
 
     def ProjControl(self, controlType, value):
